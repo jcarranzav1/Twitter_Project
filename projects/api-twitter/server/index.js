@@ -28,7 +28,15 @@ app.use((req, res, next) => {
 
 // error
 app.use((error, req, res, next) => {
-  const { statusCode = 500, message = '' } = error;
+  const { message = '', name = '' } = error;
+  let { statusCode = 500 } = error;
+
+  if (name === 'ValidationError') {
+    statusCode = 422;
+    logger.warn(message);
+  } else {
+    logger.error(message);
+  }
   logger.error(message);
 
   res.status(statusCode);

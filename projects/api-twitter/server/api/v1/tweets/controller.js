@@ -61,6 +61,7 @@ exports.update = async (req, res, next) => {
   console.log(doc, body);
   Object.assign(doc, body);
   try {
+    // Model.findbyIdAndUpdate()
     const data = await doc.save();
     res.json({
       data,
@@ -70,6 +71,7 @@ exports.update = async (req, res, next) => {
   }
 };
 exports.delete = async (req, res, next) => {
+  // Model.findbyIdAndDelete()
   const { doc = {} } = req;
   try {
     const data = await doc.remove();
