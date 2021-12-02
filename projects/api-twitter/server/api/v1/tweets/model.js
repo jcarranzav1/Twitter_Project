@@ -22,4 +22,7 @@ const tweet = new mongoose.Schema(fields, {
 });
 
 const model = mongoose.model('tweet', tweet);
-module.exports = model;
+module.exports = {
+  Model: model,
+  fields,
+};
