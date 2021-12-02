@@ -1,11 +1,19 @@
 const http = require('http');
+
 const app = require('./server');
 const config = require('./server/config/config');
+const { connect } = require('./server/database');
 
-/* const hostname: '127.0.0.1; ya no es necesario ponerlo,
-porque esta configuracion ya corre en la maquina local */
+const { database, port } = config;
 
-const { port } = config;
+// Database
+connect({
+    url: database.url,
+    username: database.username,
+    password: database.password,
+});
+
+// Server
 const server = http.createServer(app);
 
 server.listen(port, () => {
