@@ -1,3 +1,4 @@
+const { paginationParams } = require('../../../utils');
 const Model = require('./model');
 
 exports.id = async (req, res, next) => {
@@ -22,11 +23,27 @@ exports.id = async (req, res, next) => {
 };
 
 exports.all = async (req, res, next) => {
-  const data = await Model.find({}).exec();
-  // const { query = {} } = req;
+  const { query = {} } = req;
+  const { limit, skip, page } = paginationParams(query);
+  const docs = Model.find({}).skip(skip).limit(limit);
+  const all = Model.countDocuments();
   try {
+    const response = await Promise.all([docs.exec(), all.exec()]);
+    // se hace con el fin de ejecuar docs y all en paralelo.
+    // Ya no necesitamos esperar que se cumpla una, para ejecutar la otra.
+    // Es una forma de optimizar promesas.
+    const [data, total] = response;
+    const pages = Math.ceil(total / limit);
+
     res.json({
       data,
+      meta: {
+        limit,
+        skip,
+        total,
+        page,
+        pages,
+      },
     });
   } catch (error) {
     next(error);
