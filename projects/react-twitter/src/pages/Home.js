@@ -5,6 +5,7 @@ import useTweets from '../hooks/useTweets';
 
 const Home = () => {
 	const { data: tweets = [], loading = false, error = '' } = useTweets();
+	console.log(tweets);
 	return (
 		<Container className="my-4">
 			<Row className="justify-content-center">
