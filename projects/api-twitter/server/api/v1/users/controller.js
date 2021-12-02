@@ -3,15 +3,14 @@ const {
   sortParams,
   sortTransform,
 } = require('../../../utils');
-const { Model, fields, references } = require('./model');
 
-const referencesNames = Object.getOwnPropertyNames(references);
+const { Model, fields } = require('./model');
 
 exports.id = async (req, res, next) => {
   const { params = {} } = req;
   const { id = '' } = params;
   try {
-    const data = await Model.findById(id).populate(referencesNames.join(' '));
+    const data = await Model.findById(id);
     if (!data) {
       const message = `${Model.modelName} not found`;
       next({
@@ -36,8 +35,7 @@ exports.all = async (req, res, next) => {
   const docs = Model.find({})
     .sort(sortTransform(sortBy, direction))
     .skip(skip)
-    .limit(limit)
-    .populate(referencesNames.join(' '));
+    .limit(limit);
 
   const all = Model.countDocuments();
   try {
