@@ -1,15 +1,14 @@
 const express = require('express');
 const controller = require('./controller');
-const tweetsRouter = require('../tweets/routes');
 
 const router = express.Router();
 
 /*
- * /api/users      GET     -Get All
- * users      POST    -Create users
- * /api/users      GET     -Get a user
- * /api/tweets      PUT     -Update a user
- * /api/users      DELETE  -Delete a user
+ * /api/tweets      GET     -Get All
+ * /api/tweets      POST    -Create Tweet
+ * /api/tweets      GET     -Get a Tweet
+ * /api/tweets      PUT     -Update a Tweet
+ * /api/tweets      DELETE  -Delete a Tweet
  */
 
 router.route('/').get(controller.all).post(controller.create);
@@ -26,5 +25,4 @@ router
   .patch(controller.update)
   .delete(controller.delete);
 
-router.use('/:user/tweets', tweetsRouter);
 module.exports = router;

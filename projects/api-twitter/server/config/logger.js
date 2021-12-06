@@ -1,7 +1,7 @@
 const winston = require('winston');
 const morgan = require('morgan');
 const { v4: uuid4 } = require('uuid');
-const stripFinalNewLine = require('strip-final-newline');
+const stripFinalNewline = require('strip-final-newline');
 
 const logger = winston.createLogger({
   format: winston.format.simple(),
@@ -31,7 +31,11 @@ morgan.token('id', (req) => req.id);
 exports.requestLog = morgan(
   ':remote-addr [:date[iso]] :id ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
   {
-    stream: { write: (message) => logger.info(stripFinalNewLine(message)) },
+    stream: {
+      write: (message) => {
+        logger.info(stripFinalNewline(message));
+      },
+    },
   },
 );
 

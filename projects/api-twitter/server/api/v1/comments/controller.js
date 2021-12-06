@@ -1,46 +1,17 @@
 const {
-  filterByNested,
   paginationParams,
   sortParams,
   sortTransform,
 } = require('../../../utils');
+const { Model, fields, references } = require('./model');
 
-// eslint-disable-next-line object-curly-newline
-const { Model, fields, references, virtuals } = require('./model');
-const { Model: User } = require('../users/model');
-
-const referencesNames = [
-  ...Object.getOwnPropertyNames(references),
-  ...Object.getOwnPropertyNames(virtuals),
-];
-
-exports.parentId = async (req, res, next) => {
-  const { params = {} } = req;
-  const { user = '' } = params;
-
-  if (user) {
-    const data = await User.findById(user).exec();
-    if (data) {
-      next();
-    } else {
-      const message = 'User not found';
-      next({
-        message,
-        statusCode: 404,
-        level: 'error',
-      });
-    }
-  } else {
-    next();
-  }
-};
+const referencesNames = Object.getOwnPropertyNames(references);
 
 exports.id = async (req, res, next) => {
   const { params = {} } = req;
   const { id = '' } = params;
-  const { populate } = filterByNested(params, referencesNames);
   try {
-    const data = await Model.findById(id).populate(populate);
+    const data = await Model.findById(id).populate(referencesNames.join(' '));
     if (!data) {
       const message = `${Model.modelName} not found`;
       next({
@@ -58,18 +29,17 @@ exports.id = async (req, res, next) => {
 };
 
 exports.all = async (req, res, next) => {
-  const { params, query = {} } = req;
+  const { query = {} } = req;
   const { limit, skip, page } = paginationParams(query);
   const { sortBy, direction } = sortParams(query, fields);
-  const { filters, populate } = filterByNested(params, referencesNames);
 
-  const docs = Model.find(filters)
+  const docs = Model.find({})
     .sort(sortTransform(sortBy, direction))
     .skip(skip)
     .limit(limit)
-    .populate(populate);
+    .populate(referencesNames.join(' '));
 
-  const all = Model.countDocuments(filters);
+  const all = Model.countDocuments();
   try {
     const response = await Promise.all([docs.exec(), all.exec()]);
     // se hace con el fin de ejecuar docs y all en paralelo.
@@ -117,7 +87,6 @@ exports.read = async (req, res, next) => {
   });
 };
 exports.update = async (req, res, next) => {
-  // const { doc = {}, body = {}, params = {} } = req;
   const { doc = {}, body = {} } = req;
   console.log(doc, body);
   Object.assign(doc, body);

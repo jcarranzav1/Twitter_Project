@@ -1,7 +1,9 @@
 const express = require('express');
 const controller = require('./controller');
 
-const router = express.Router();
+const router = express.Router({
+  mergeParams: true,
+});
 
 /*
  * /api/tweets      GET     -Get All
@@ -11,8 +13,12 @@ const router = express.Router();
  * /api/tweets      DELETE  -Delete a Tweet
  */
 
-router.route('/').get(controller.all).post(controller.create);
-router.param('id', controller.id);
+router
+  .route('/')
+  .get(controller.parentId, controller.all)
+  .post(controller.parentId, controller.create);
+
+router.param('id', controller.parentId, controller.id);
 
 // este middleware id corre antes que los middlewares de read, update y delete. Por eso se coloco antes.
 

@@ -11,6 +11,7 @@ exports.paginationParams = ({
   page: Number.parseInt(page, 10),
   skip: skip ? Number.parseInt(skip, 10) : (page - 1) * 10,
 });
+
 exports.sortParams = (
   { sortBy = sort.sortBy.default, direction = sort.direction.default },
   fields,
@@ -39,4 +40,17 @@ exports.sortParams = (
 exports.sortTransform = (sortBy, direction) => {
   const dir = direction === 'desc' ? '-' : '';
   return `${dir}${sortBy}`;
+};
+
+exports.filterByNested = (params, referencesNames) => {
+  // referencesName = ['users]
+  const paramsName = Object.getOwnPropertyNames(params); // ['users']
+  const populateNames = referencesNames.filter(
+    (item) => !paramsName.includes(item),
+  ); // []
+
+  return {
+    filters: params,
+    populate: populateNames.join(' '),
+  };
 };

@@ -9,6 +9,7 @@ const { Model, fields } = require('./model');
 exports.id = async (req, res, next) => {
   const { params = {} } = req;
   const { id = '' } = params;
+
   try {
     const data = await Model.findById(id);
     if (!data) {
@@ -29,10 +30,18 @@ exports.id = async (req, res, next) => {
 
 exports.all = async (req, res, next) => {
   const { query = {} } = req;
+  const { filterBy, value } = query;
   const { limit, skip, page } = paginationParams(query);
   const { sortBy, direction } = sortParams(query, fields);
+  const searchBy = {};
 
-  const docs = Model.find({})
+  if (filterBy && value) {
+    /* searchBy = { [filterBy]: value }; */
+    Object.defineProperty(searchBy, filterBy, { value });
+    console.log(searchBy);
+  }
+
+  const docs = Model.find({ searchBy })
     .sort(sortTransform(sortBy, direction))
     .skip(skip)
     .limit(limit);
@@ -86,7 +95,7 @@ exports.read = async (req, res, next) => {
 };
 exports.update = async (req, res, next) => {
   const { doc = {}, body = {} } = req;
-  console.log(doc, body);
+
   Object.assign(doc, body);
   try {
     // Model.findbyIdAndUpdate()

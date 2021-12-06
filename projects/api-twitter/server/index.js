@@ -18,6 +18,7 @@ app.use('/api/1', api);
 app.use((req, res, next) => {
   const message = 'Error. Route Not Found';
   const statusCode = 404;
+
   logger.warn(message);
 
   next({
@@ -37,7 +38,6 @@ app.use((error, req, res, next) => {
   } else {
     logger.error(message);
   }
-  logger.error(message);
 
   res.status(statusCode);
   res.json({
@@ -45,4 +45,5 @@ app.use((error, req, res, next) => {
     error,
   });
 });
+
 module.exports = app;

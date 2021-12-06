@@ -23,13 +23,29 @@ const references = {
     required: true,
   },
 };
+
+const virtuals = {
+  comments: {
+    ref: 'comment',
+    localField: '_id',
+    foreignField: 'tweet',
+  },
+};
+
 const tweet = new mongoose.Schema(Object.assign(fields, references), {
   timestamps: true, // nos crea la fecha de creación y la fecha de edición
+  toJSON: {
+    virtuals: true,
+  },
 });
 
+tweet.virtual('comments', virtuals.comments);
+
 const model = mongoose.model('tweet', tweet);
+
 module.exports = {
   Model: model,
   fields,
   references,
+  virtuals,
 };
