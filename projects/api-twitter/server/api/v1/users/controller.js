@@ -37,11 +37,11 @@ exports.all = async (req, res, next) => {
 
   if (filterBy && value) {
     /* searchBy = { [filterBy]: value }; */
-    Object.defineProperty(searchBy, filterBy, { value });
-    console.log(searchBy);
+    Object.defineProperty(searchBy, filterBy, { value, enumerable: true });
+    // agregamos enumerable para que funcione en loops
   }
 
-  const docs = Model.find({ searchBy })
+  const docs = Model.find(searchBy)
     .sort(sortTransform(sortBy, direction))
     .skip(skip)
     .limit(limit);
