@@ -6,11 +6,11 @@ const router = express.Router({
 });
 
 /*
- * /api/tweets      GET     -Get All
- * /api/tweets      POST    -Create Tweet
- * /api/tweets      GET     -Get a Tweet
- * /api/tweets      PUT     -Update a Tweet
- * /api/tweets      DELETE  -Delete a Tweet
+ * /api/tweets          GET     -Get All
+ * /api/tweets          POST    -Create Tweet
+ * /api/tweets/:id      GET     -Get a Tweet
+ * /api/tweets/:id      PUT     -Update a Tweet
+ * /api/tweets/:id      DELETE  -Delete a Tweet
  */
 
 router

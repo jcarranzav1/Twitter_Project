@@ -4,11 +4,11 @@ const controller = require('./controller');
 const router = express.Router();
 
 /*
- * /api/tweets      GET     -Get All
- * /api/tweets      POST    -Create Tweet
- * /api/tweets      GET     -Get a Tweet
- * /api/tweets      PUT     -Update a Tweet
- * /api/tweets      DELETE  -Delete a Tweet
+ * /api/comments          GET     -Get All
+ * /api/comments          POST    -Create users
+ * /api/comments/:id      GET     -Get a user
+ * /api/comments/:id      PUT     -Update a user
+ * /api/comments/:id      DELETE  -Delete a user
  */
 
 router.route('/').get(controller.all).post(controller.create);
