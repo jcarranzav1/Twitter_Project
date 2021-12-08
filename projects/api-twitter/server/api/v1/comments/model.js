@@ -21,7 +21,7 @@ const references = {
   },
 };
 const comment = new mongoose.Schema(Object.assign(fields, references), {
-  timestamps: true, // nos crea la fecha de creación y la fecha de edición
+  timestamps: true,
 });
 
 const model = mongoose.model('comment', comment);

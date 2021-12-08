@@ -1,5 +1,6 @@
 const express = require('express');
 const controller = require('./controller');
+const { auth, owner } = require('../auth');
 
 const router = express.Router({
   mergeParams: true,
@@ -16,19 +17,19 @@ const router = express.Router({
 router
   .route('/')
   .get(controller.parentId, controller.all)
-  .post(controller.parentId, controller.create);
+  .post(controller.parentId, auth, controller.create);
 
-router.param('id', controller.parentId, controller.id);
+router.param('id', controller.id);
+// router param, solo corre un middelware, a diferencia de router.route que concatena middlewares.
 
 // este middleware id corre antes que los middlewares de read, update y delete. Por eso se coloco antes.
-
 // Se hace con el fin de evitar hacer .get(controller.id,controller.read).put(controller.id,controller.update)
 
 router
   .route('/:id')
-  .get(controller.read)
-  .put(controller.update)
-  .patch(controller.update)
-  .delete(controller.delete);
+  .get(controller.parentId, controller.read)
+  .put(controller.parentId, auth, owner, controller.update)
+  .patch(controller.parentId, auth, owner, controller.update)
+  .delete(controller.parentId, auth, owner, controller.delete);
 
 module.exports = router;

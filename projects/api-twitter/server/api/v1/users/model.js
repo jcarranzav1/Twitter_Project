@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// eslint-disable-next-line import/no-unresolved
 const { hash, compare } = require('bcryptjs');
 
 const fields = {
@@ -39,7 +38,7 @@ const fields = {
 const hiddenFields = ['password'];
 
 const user = new mongoose.Schema(fields, {
-  timestamps: true, // nos crea la fecha de creación y la fecha de edición
+  timestamps: true,
   toJSON: {
     virtuals: true,
   },
@@ -68,11 +67,13 @@ user.pre('save', async function save(next) {
   next();
 });
 
-/* a los documentos, le puedo crear mis propios métodos (funciones) */
-
+/* a los documentos, le puedo crear mis propios métodos (funciones).
+   Estos métodos, se van a instanciar en cualquier parte de nuestro documento.
+*/
 // user.methods.toJSON : convertimos el documento en un objeto JS
 // como nosotros más arriba llamamos a la funcion de mongoose toJSON,
 // pues esta funcion de abajo, se ejecutará antes de crear un archivo JSON.
+
 user.methods.toJSON = function toJSON() {
   const document = this.toObject();
   hiddenFields.forEach((field) => {

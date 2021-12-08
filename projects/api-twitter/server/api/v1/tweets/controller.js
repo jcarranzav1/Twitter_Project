@@ -93,8 +93,16 @@ exports.all = async (req, res, next) => {
   }
 };
 exports.create = async (req, res, next) => {
-  const { body = {} } = req;
-  const document = new Model(body);
+  const { body = {}, decoded } = req;
+  const { id } = decoded;
+  const document = new Model({
+    ...body,
+    user: id,
+    /* este user hace referencia al user de nuestro model.
+    Antes agregabamos en el Postman el id del usuario, ahora usando tokens (signin)
+    lo protegemos y lo enviamos automaticamente por auth y los routes
+    */
+  });
   try {
     const data = await document.save();
     const status = 201;
@@ -119,7 +127,7 @@ exports.read = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   // const { doc = {}, body = {}, params = {} } = req;
   const { doc = {}, body = {} } = req;
-  console.log(doc, body);
+
   Object.assign(doc, body);
   try {
     // Model.findbyIdAndUpdate()

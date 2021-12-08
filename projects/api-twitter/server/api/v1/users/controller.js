@@ -5,6 +5,7 @@ const {
 } = require('../../../utils');
 
 const { Model, fields } = require('./model');
+const { signToken } = require('../auth');
 
 exports.id = async (req, res, next) => {
   const { params = {} } = req;
@@ -20,7 +21,7 @@ exports.id = async (req, res, next) => {
         level: 'warn',
       });
     } else {
-      req.doc = data; // hacemos monekey patch, para que el res en read lea el elemento docx
+      req.doc = data; // hacemos monekey patch, para que el res en read lea el elemento doc
       next();
     }
   } catch (error) {
@@ -49,9 +50,6 @@ exports.all = async (req, res, next) => {
   const all = Model.countDocuments();
   try {
     const response = await Promise.all([docs.exec(), all.exec()]);
-    // se hace con el fin de ejecuar docs y all en paralelo.
-    // Ya no necesitamos esperar que se cumpla una, para ejecutar la otra.
-    // Es una forma de optimizar promesas.
     const [data, total] = response;
     const pages = Math.ceil(total / limit);
 
@@ -69,17 +67,79 @@ exports.all = async (req, res, next) => {
     next(error);
   }
 };
-exports.create = async (req, res, next) => {
+
+exports.signin = async (req, res, next) => {
+  // Recibir informacion
+  // SI NO = res no existe 201
+  // SI = Veriticar Password
+  // SI NO = res no existe 201
+  // SI = Devolver la informacion del usuario
+
+  // Recibir informacion
+  const { body = {} } = req;
+  const { username, password } = body;
+
+  try {
+    // Buscar el usuario (documento) por el username
+    const user = await Model.findOne({
+      username,
+    }).exec();
+    // SI NO = res no existe 200
+    const message = 'Username or password invalid';
+    const statusCode = 200;
+
+    if (!user) {
+      /* este return se le conoce como early return. Porque si user no existe ejecuta el next
+        y como esta con el return, se saldra de nuestra funcion signin, porque si no tocaría
+        crear if else.
+      */
+      return next({
+        message,
+        statusCode,
+      });
+    }
+
+    // SI = Veriticar Password
+    const verified = await user.verifyPassword(password);
+    if (!verified) {
+      // SI NO = res no existe 200
+      return next({
+        message,
+        statusCode,
+      });
+    }
+
+    const token = signToken({
+      id: user.id,
+    });
+    // SI = Devolver la informacion del usuario
+    return res.json({
+      data: user,
+      meta: {
+        token,
+      },
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+exports.signup = async (req, res, next) => {
   const { body = {} } = req;
   const document = new Model(body);
   try {
     const data = await document.save();
     const status = 201;
     res.status(status);
+
+    const token = signToken({
+      id: data.id,
+    });
+
     res.json({
       data,
       meta: {
-        status,
+        token,
       },
     });
   } catch (error) {
@@ -93,13 +153,11 @@ exports.read = async (req, res, next) => {
     data: doc,
   });
 };
-exports.update = async (req, res, next) => {
-  const { doc = {}, body = {} } = req;
-
-  Object.assign(doc, body);
+exports.profile = async (req, res, next) => {
+  const { decoded } = req;
+  const { id } = decoded;
   try {
-    // Model.findbyIdAndUpdate()
-    const data = await doc.save();
+    const data = await Model.findById(id);
     res.json({
       data,
     });
@@ -107,11 +165,15 @@ exports.update = async (req, res, next) => {
     next(error);
   }
 };
-exports.delete = async (req, res, next) => {
-  // Model.findbyIdAndDelete()
-  const { doc = {} } = req;
+
+exports.update = async (req, res, next) => {
+  const { body = {}, decoded } = req;
+  const { id } = decoded;
+  // const { doc={}, body = {} } = req;
+  // Object.assign(doc, body);
   try {
-    const data = await doc.remove();
+    const data = await Model.findByIdAndUpdate(id, body, { new: true });
+    // findByIdAndUpdate data será el anterior, con new:true cojemos el data actual.
     res.json({
       data,
     });

@@ -42,9 +42,6 @@ exports.all = async (req, res, next) => {
   const all = Model.countDocuments();
   try {
     const response = await Promise.all([docs.exec(), all.exec()]);
-    // se hace con el fin de ejecuar docs y all en paralelo.
-    // Ya no necesitamos esperar que se cumpla una, para ejecutar la otra.
-    // Es una forma de optimizar promesas.
     const [data, total] = response;
     const pages = Math.ceil(total / limit);
 
@@ -88,10 +85,8 @@ exports.read = async (req, res, next) => {
 };
 exports.update = async (req, res, next) => {
   const { doc = {}, body = {} } = req;
-  console.log(doc, body);
   Object.assign(doc, body);
   try {
-    // Model.findbyIdAndUpdate()
     const data = await doc.save();
     res.json({
       data,
@@ -101,7 +96,6 @@ exports.update = async (req, res, next) => {
   }
 };
 exports.delete = async (req, res, next) => {
-  // Model.findbyIdAndDelete()
   const { doc = {} } = req;
   try {
     const data = await doc.remove();
