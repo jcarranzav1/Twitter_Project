@@ -61,7 +61,10 @@ exports.all = async (req, res, next) => {
   const { params, query = {} } = req;
   const { limit, skip, page } = paginationParams(query);
   const { sortBy, direction } = sortParams(query, fields);
-  const { filters, populate } = filterByNested(params, referencesNames);
+  const updateReferenceNames = referencesNames.filter(
+    (item) => item !== 'comments',
+  );
+  const { filters, populate } = filterByNested(params, updateReferenceNames);
 
   const docs = Model.find(filters)
     .sort(sortTransform(sortBy, direction))

@@ -6,12 +6,14 @@ const { auth } = require('../auth');
 const router = express.Router();
 
 /*
- * /api/users           GET     -Get All
- * /api/users/signin    POST    -Signin
- * /api/users/signup    POST    -Signup
- * /api/users/:id       GET     -Get a user
- * /api/users/:id       PUT     -Update a user
- * /api/users/:id       DELETE  -Delete a user
+ * /api/users                 GET     -Get All
+ * /api/users/signin          POST    -Signin
+ * /api/users/signup          POST    -Signup
+ * /api/users/profile         GET     -Get Profile of the current user
+ * /api/users/profile         PUT     -Update the profile of the current user
+ * /api/users/:id             GET     -Get a user
+ * /api/users/:id/tweets      GET     -Get all tweets from the user.
+
  */
 
 router.route('/').get(controller.all);
