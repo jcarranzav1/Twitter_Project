@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const { body } = require('express-validator');
 
+const sanitizers = [body('content').escape(), body('location').escape()];
 const fields = {
   content: {
     type: String,
@@ -14,6 +16,10 @@ const fields = {
   likes: {
     type: Number,
     default: 0,
+  },
+  publishDate: {
+    type: Date,
+    default: new Date(),
   },
 };
 const references = {
@@ -48,4 +54,5 @@ module.exports = {
   fields,
   references,
   virtuals,
+  sanitizers,
 };

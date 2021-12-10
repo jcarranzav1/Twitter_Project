@@ -1,6 +1,16 @@
 const mongoose = require('mongoose');
-
 const { hash, compare } = require('bcryptjs');
+// eslint-disable-next-line import/no-unresolved
+const { default: isEmail } = require('validator/lib/isemail');
+const { body } = require('express-validator');
+
+const sanitizers = [
+  body('username').escape(),
+  body('name').escape(),
+  body('lastname').escape(),
+  body('email').escape(),
+  body('password').isLength({ min: 6, max: 25 }).escape(),
+];
 
 const fields = {
   username: {
@@ -8,6 +18,7 @@ const fields = {
     required: true,
     trim: true,
     maxLength: 128,
+    unique: true,
   },
   name: {
     type: String,
@@ -23,15 +34,22 @@ const fields = {
   },
   email: {
     type: String,
-    required: true,
+    required: [true, 'This field is important!'],
     trim: true,
     maxLength: 256,
+    unique: true,
+    validate: {
+      validator(value) {
+        return isEmail(value);
+      },
+      message: (props) => `${props.value} is not a valid email!`,
+    },
   },
   password: {
     type: String,
     required: true,
     trim: true,
-    minLength: 6,
+    minLength: [6, 'The password must be at least 6 characters'],
     maxLength: 256,
   },
 };
@@ -93,4 +111,5 @@ const model = mongoose.model('user', user);
 module.exports = {
   Model: model,
   fields,
+  sanitizers,
 };

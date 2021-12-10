@@ -2,6 +2,7 @@ const express = require('express');
 const controller = require('./controller');
 const tweetsRouter = require('../tweets/routes');
 const { auth } = require('../auth');
+const { sanitizers } = require('./model');
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ const router = express.Router();
 
 router.route('/').get(controller.all);
 router.route('/signin').post(controller.signin);
-router.route('/signup').post(controller.signup);
+router.route('/signup').post(sanitizers, controller.signup);
 
 router
   .route('/profile')
