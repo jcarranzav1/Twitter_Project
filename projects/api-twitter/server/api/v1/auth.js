@@ -32,7 +32,7 @@ exports.auth = (req, res, next) => {
           statusCode,
         });
       } else {
-        req.decoded = decoded;
+        req.decoded = decoded; // Monkey Patch
         next();
       }
     });

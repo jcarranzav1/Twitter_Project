@@ -26,5 +26,8 @@ const config = {
     secret: process.env.TOKEN_SECRET,
     expires: process.env.TOKEN_EXPIRES,
   },
+  cors: {
+    origin: process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+  },
 };
 module.exports = config;

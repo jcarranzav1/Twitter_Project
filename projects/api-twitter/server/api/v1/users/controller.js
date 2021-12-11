@@ -112,6 +112,7 @@ exports.signin = async (req, res, next) => {
     const token = signToken({
       id: user.id,
     });
+
     // SI = Devolver la informacion del usuario
     return res.json({
       data: user,

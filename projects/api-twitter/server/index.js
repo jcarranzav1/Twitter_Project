@@ -1,11 +1,20 @@
 const express = require('express');
+const cors = require('cors');
 
 const api = require('./api/v1/api');
 const { logger, requestId, requestLog } = require('./config/logger');
+const { cors: corsConfig } = require('./config');
 
 const app = express();
 
 // Middleware
+app.use(
+  cors({
+    origin: corsConfig,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Accept', 'Content-Type', 'Authorization'],
+  }),
+);
 app.use(requestId);
 app.use(requestLog);
 app.use(express.json()); // es como el body-parser

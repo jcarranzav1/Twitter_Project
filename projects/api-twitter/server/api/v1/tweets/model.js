@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 const { body } = require('express-validator');
 
-const sanitizers = [body('content').escape(), body('location').escape()];
+const sanitizers = [
+  body('content').escape(),
+  body('location').escape(),
+  body('likes').exists(),
+  body('publishDate').exists(),
+];
+
 const fields = {
   content: {
     type: String,

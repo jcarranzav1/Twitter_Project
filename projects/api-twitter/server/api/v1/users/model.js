@@ -9,7 +9,7 @@ const sanitizers = [
   body('name').escape(),
   body('lastname').escape(),
   body('email').escape(),
-  body('password').isLength({ min: 6, max: 25 }).escape(),
+  body('password').escape(),
 ];
 
 const fields = {
@@ -17,6 +17,7 @@ const fields = {
     type: String,
     required: true,
     trim: true,
+    minLength: [6, 'The username must be at least 6 characters'],
     maxLength: 128,
     unique: true,
   },

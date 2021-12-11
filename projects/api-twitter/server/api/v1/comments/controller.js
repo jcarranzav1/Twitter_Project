@@ -60,8 +60,13 @@ exports.all = async (req, res, next) => {
   }
 };
 exports.create = async (req, res, next) => {
-  const { body = {} } = req;
-  const document = new Model(body);
+  const { body = {}, decoded } = req;
+  const { id } = decoded;
+  const document = new Model({
+    ...body,
+    user: id,
+  });
+
   try {
     const data = await document.save();
     const status = 201;
