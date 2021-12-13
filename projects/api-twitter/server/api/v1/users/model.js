@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { hash, compare } = require('bcryptjs');
 // eslint-disable-next-line import/no-unresolved
-const { default: isEmail } = require('validator/lib/isemail');
+const { isEmail } = require('validator');
 const { body } = require('express-validator');
 
 const sanitizers = [
