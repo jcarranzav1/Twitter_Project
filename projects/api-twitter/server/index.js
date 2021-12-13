@@ -1,9 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
 
-const api = require('./api/v1/api');
 const { logger, requestId, requestLog } = require('./config/logger');
 const { cors: corsConfig } = require('./config');
+
+const api = require('./api/v1/api');
+const swaggerDocument = require('./api/v1/swagger.json');
 
 const app = express();
 
@@ -22,7 +25,7 @@ app.use(express.json()); // es como el body-parser
 // API
 app.use('/api', api);
 app.use('/api/1', api);
-
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // catch all
 app.use((req, res, next) => {
   const message = 'Error. Route Not Found';
