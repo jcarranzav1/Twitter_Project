@@ -17,7 +17,7 @@ exports.sortParams = (
   fields,
 ) => {
   const safeList = {
-    sortBy: [Object.getOwnPropertyNames(fields), ...sort.sortBy.fields],
+    sortBy: [...Object.getOwnPropertyNames(fields), ...sort.sortBy.fields],
     direction: sort.direction.options,
   };
   // Crear una lista de todos los campos
@@ -43,8 +43,9 @@ exports.sortTransform = (sortBy, direction) => {
 };
 
 exports.filterByNested = (params, referencesNames) => {
-  // referencesName = ['users]
-  const paramsName = Object.getOwnPropertyNames(params); // ['users']
+  // params = { user: '61b3720cb41db6c165581d0e' }
+  // referencesNames = ['user'], recuerda que quitamos el populate de los comments
+  const paramsName = Object.getOwnPropertyNames(params); // ['user']
   const populateNames = referencesNames.filter(
     (item) => !paramsName.includes(item),
   ); // []

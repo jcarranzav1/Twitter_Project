@@ -32,7 +32,7 @@ exports.connect = ({ url = '', username, password }, options = {}) => {
   });
 };
 
-exports.disconnected = () => {
+exports.disconnect = () => {
   mongoose.connection.close(() => {
     logger.info('Database disconnected successful');
   });
