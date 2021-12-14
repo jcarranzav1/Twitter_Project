@@ -8,6 +8,7 @@ const { database, port } = config;
 
 // Database
 connect({
+  protocol: database.protocol,
   url: database.url,
   username: database.username,
   password: database.password,

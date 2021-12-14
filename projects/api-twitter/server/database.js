@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 const { logger } = require('./config/logger');
 
-exports.connect = ({ url = '', username, password }, options = {}) => {
+exports.connect = (
+  // eslint-disable-next-line object-curly-newline
+  { protocol = 'mongodb', url = '', username, password },
+  options = {},
+) => {
   let dburl = '';
   if (username && password) {
-    dburl = `mongodb://${username}:${password}@${url}`;
+    dburl = `${protocol}://${username}:${password}@${url}`;
   } else {
-    dburl = `mongodb://${url}`;
+    dburl = `${protocol}://${url}`;
   }
   mongoose.connect(dburl, {
     ...options,
