@@ -1,42 +1,55 @@
 import React from 'react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
-import { useNavigate } from 'react-router';
+import {
+	Alert,
+	Button,
+	Card,
+	Col,
+	Container,
+	Form,
+	Row,
+	Spinner,
+} from 'react-bootstrap';
+
+import { useUsers } from '../../hooks/useUsers';
 
 const SignIn = () => {
-	const navigate = useNavigate();
-	const handleLogin = () => {
-		navigate('/');
+	const [data, submitUser] = useUsers();
+	const { loading, error } = data;
+
+	const onSubmit = async (event) => {
+		event.preventDefault();
+		const { username, password } = event.target.elements;
+		await submitUser({
+			username: username.value,
+			password: password.value,
+		});
 	};
+
 	return (
 		<Container className="mt-5">
 			<Row className="justify-content-center m-auto w-75">
 				<Col lg={8}>
 					<Card className="py-5 px-5">
-						<Form>
-							<Form.Group
-								className="mb-3"
-								controlId="formBasicEmail">
-								<Form.Label>Email address</Form.Label>
-								<Form.Control
-									autoComplete="on"
-									type="email"
-									placeholder="Enter email"
-								/>
+						{error && <Alert variant="warning">{error}</Alert>}
+						<Form onSubmit={onSubmit}>
+							<Form.Group className="mb-3">
+								<Form.Label>Username</Form.Label>
+								<Form.Control type="text" name="username" />
 							</Form.Group>
-							<Form.Group
-								className="mb-3"
-								controlId="formBasicPassword">
+							<Form.Group className="mb-3">
 								<Form.Label>Password</Form.Label>
-								<Form.Control
-									autoComplete="on"
-									type="password"
-									placeholder="Password"
-								/>
+								<Form.Control type="password" name="password" />
 							</Form.Group>
 							<Button
 								variant="primary"
 								type="submit"
-								onClick={handleLogin}>
+								disabled={loading}>
+								{loading && (
+									<Spinner
+										animation="border"
+										variant="light"
+									/>
+								)}
 								Sign In
 							</Button>
 						</Form>

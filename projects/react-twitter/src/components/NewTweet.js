@@ -4,15 +4,17 @@ import { Button, Form } from 'react-bootstrap';
 export default function NewTweet({ onSubmit }) {
 	const [displayForm, setDisplayForm] = useState(false);
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const { content, location } = e.target.elements;
 		setDisplayForm(false);
-		onSubmit({
+		console.log(onSubmit);
+		await onSubmit({
 			content: content.value,
 			location: location.value,
 		});
 	};
+
 	return displayForm ? (
 		<Form className="mb-4" onSubmit={handleSubmit}>
 			<Form.Group className="mb-3">

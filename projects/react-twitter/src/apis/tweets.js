@@ -12,7 +12,7 @@ export const getTweets = async () => {
 
 export const createTweets = async (body) => {
 	const token =
-		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYjM3MjJhYjQxZGI2YzE2NTU4MWQxNSIsImlhdCI6MTYzOTU3NDI1MywiZXhwIjoxNjM5NTc3ODUzfQ.cRFiaB_wsqdYrEAQx07r7J33SJdRgQkLxwYztiQewQI';
+		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYjM3MjBjYjQxZGI2YzE2NTU4MWQwZSIsImlhdCI6MTYzOTkzOTMyMiwiZXhwIjoxNjM5OTQyOTIyfQ.ouELKtP-IyMnWMCKU5H5FGkarQz57UqNVb60FEpieGg';
 	try {
 		const resp = await fetch(`${BASE_URL}/tweets`, {
 			method: 'POST',
