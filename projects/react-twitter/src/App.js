@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 
@@ -11,16 +11,8 @@ import { authReducer } from './auth/authReducer';
 const Home = React.lazy(() => import('./pages/Home'));
 const SignIn = React.lazy(() => import('./pages/auth/SignIn'));
 
-const init = () => {
-	return JSON.parse(localStorage.getItem('user')) || { logged: false };
-};
-
 function App() {
-	const [user, setUser] = useReducer(authReducer, {}, init);
-
-	useEffect(() => {
-		localStorage.setItem('user', JSON.stringify(user));
-	}, [user]);
+	const [user, setUser] = useReducer(authReducer, {});
 
 	return (
 		<AuthContext.Provider value={{ user, setUser }}>

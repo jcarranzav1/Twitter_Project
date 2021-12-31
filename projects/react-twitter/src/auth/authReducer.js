@@ -1,3 +1,4 @@
+import { signOut } from '../apis/users';
 import { types } from '../types/types';
 
 export const authReducer = (state = {}, action) => {
@@ -11,6 +12,11 @@ export const authReducer = (state = {}, action) => {
 			return {
 				...action.payload,
 				logged: true,
+			};
+		case types.signout:
+			signOut();
+			return {
+				logged: false,
 			};
 		default:
 			return state;

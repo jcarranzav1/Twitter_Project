@@ -16,10 +16,10 @@ const SignIn = () => {
 	const [data, submitUser] = useUsers();
 	const { loading, error } = data;
 
-	const onSubmit = async (event) => {
+	const onSubmit = (event) => {
 		event.preventDefault();
 		const { username, password } = event.target.elements;
-		await submitUser({
+		submitUser({
 			username: username.value,
 			password: password.value,
 		});

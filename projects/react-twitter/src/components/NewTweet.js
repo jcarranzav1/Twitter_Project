@@ -4,12 +4,11 @@ import { Button, Form } from 'react-bootstrap';
 export default function NewTweet({ onSubmit }) {
 	const [displayForm, setDisplayForm] = useState(false);
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
 		const { content, location } = e.target.elements;
 		setDisplayForm(false);
-		console.log(onSubmit);
-		await onSubmit({
+		onSubmit({
 			content: content.value,
 			location: location.value,
 		});

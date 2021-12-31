@@ -1,10 +1,17 @@
 import React, { useContext } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
+import { types } from '../types/types';
 
 const Navigation = () => {
-	const { user } = useContext(AuthContext);
+	const navigate = useNavigate();
+	const { user, setUser } = useContext(AuthContext);
+
+	function onSignOut() {
+		setUser({ type: types.signout });
+		navigate('/');
+	}
 	return (
 		<Navbar bg="dark" expand="lg" variant="dark">
 			<Container fluid>
@@ -19,7 +26,7 @@ const Navigation = () => {
 								<Nav.Link as={Link} to="/profile">
 									{user.username}
 								</Nav.Link>
-								<Nav.Link as={Link} to="/signout">
+								<Nav.Link onClick={onSignOut}>
 									Sign Out
 								</Nav.Link>
 							</>
