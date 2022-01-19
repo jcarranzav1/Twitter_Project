@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 import { reducer } from './reducer';
 import initialState from './state';
 
@@ -15,5 +15,15 @@ export function StoreProvider({ children }) {
 			{children}
 		</Store.Provider>
 	);
+}
+
+export function useDispatch() {
+	const { dispatch } = useContext(Store);
+	return dispatch;
+}
+
+export function useSelector(callback) {
+	const { state } = useContext(Store);
+	return callback(state);
 }
 export default Store;

@@ -2,13 +2,13 @@ import React, { useContext } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from '../apis/users';
-import Store from '../store/Store';
+import { useDispatch, useSelector } from '../store/Store';
 import { types } from '../types/types';
 
 const Navigation = () => {
 	const navigate = useNavigate();
-	const { state, dispatch } = useContext(Store);
-	const { user } = state;
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.user);
 
 	function onSignOut() {
 		dispatch({ type: types.signout });

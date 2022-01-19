@@ -1,13 +1,13 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from '../apis/users';
-
-import Store from '../store/Store';
+import { useDispatch } from '../store/Store';
 import { types } from '../types/types';
 
 export const useUsers = () => {
 	const navigate = useNavigate();
-	const { dispatch } = useContext(Store);
+	const dispatch = useDispatch();
+
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 

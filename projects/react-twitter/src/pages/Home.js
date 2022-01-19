@@ -1,15 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
 import NewTweet from '../components/NewTweet';
 import { Tweet } from '../components/Tweet';
 import { useTweets } from '../hooks/useTweets';
-import Store from '../store/Store';
+import { useSelector } from '../store/Store';
 
 const Home = () => {
 	const [response, , submitTweet] = useTweets();
 	const { tweets, loading, error } = response;
-	const { state } = useContext(Store);
-	const { user } = state;
+	const user = useSelector((state) => state.user);
 
 	return (
 		<Container className="my-3">
