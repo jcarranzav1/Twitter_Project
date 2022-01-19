@@ -1,21 +1,27 @@
 import { types } from '../types/types';
-import initialState from './state';
+import { blankState } from './state';
 
-export const reducer = (state = {}, action) => {
+function reducer(state = {}, action) {
+	let draft;
 	switch (action.type) {
 		case types.signin:
-			return {
+			draft = {
 				...state,
 				user: action.payload,
 			};
+			break;
+
 		case types.signout:
-			return {
+			draft = {
 				...state,
-				user: initialState,
+				user: blankState.user,
 			};
+			break;
 
 		default:
 			throw new Error();
 	}
-};
+	localStorage.setItem('state', JSON.stringify(draft));
+	return draft;
+}
 export default reducer;
