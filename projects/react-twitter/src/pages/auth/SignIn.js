@@ -19,6 +19,7 @@ const SignIn = () => {
 	const onSubmit = (event) => {
 		event.preventDefault();
 		const { username, password } = event.target.elements;
+
 		submitUser({
 			username: username.value,
 			password: password.value,

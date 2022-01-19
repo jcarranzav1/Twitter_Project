@@ -11,7 +11,7 @@ export async function signIn(payload) {
 			body: JSON.stringify(payload),
 		});
 		const data = await resp.json(); */
-
+		console.log(await http.post('/users/signin', payload));
 		const { data: response } = await http.post('/users/signin', payload);
 		const { meta } = response;
 		const { token } = meta;

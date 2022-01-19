@@ -1,16 +1,19 @@
 import React, { useContext } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../auth/AuthContext';
+import { signOut } from '../apis/users';
+import Store from '../store/Store';
 import { types } from '../types/types';
 
 const Navigation = () => {
 	const navigate = useNavigate();
-	const { user, setUser } = useContext(AuthContext);
+	const { state, dispatch } = useContext(Store);
+	const { user } = state;
 
 	function onSignOut() {
-		setUser({ type: types.signout });
-		navigate('/');
+		dispatch({ type: types.signout });
+		signOut();
+		navigate('/signin');
 	}
 	return (
 		<Navbar bg="dark" expand="lg" variant="dark">
@@ -21,7 +24,7 @@ const Navigation = () => {
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="ms-auto me-5 fs-5">
-						{user?.logged ? (
+						{user?.username ? (
 							<>
 								<Nav.Link as={Link} to="/profile">
 									{user.username}
